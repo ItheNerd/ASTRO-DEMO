@@ -3,25 +3,31 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import "../styles/global.css";
 export interface Props {
-  title?: string;
-  showHeader?: boolean;
+	title?: string;
+	CMS?: string;
+	showHeader?: boolean;
 }
-const { showHeader = true, title = "Astro Crash Course" } =
-  Astro.props as Props;
+const {
+	showHeader = true,
+	title = "Astro Crash Course",
+	CMS,
+} = Astro.props as Props;
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <Header show={showHeader} />
-    <!-- slot tells astro where to place the data -->
-    <slot />
-  </body>
-  <Footer />
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{title}</title>
+		<link rel="icon" type="image/x-icon" href="../favicon.svg" />
+		<script src={CMS}></script>
+	</head>
+	<body>
+		<Header show={showHeader} />
+		<!-- slot tells astro where to place the data -->
+		<slot />
+	</body>
+	<Footer />
 </html>
