@@ -1,0 +1,32 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Card from "../components/Card.astro";
+
+export async function getStaticPaths() {
+	const posts = await Astro.glob("../../public/posts/*.md");
+	return posts.map((post) => {
+		return {
+			params: { slug: post.frontmatter.slug },
+			props: { data: post.frontmatter, Content: post.Content },
+		};
+	});
+}
+const { data, Content } = Astro.props;
+---
+
+<Layout title={data.title}>
+	<section class="page-content">
+		<div class="container">
+			<Card>
+				<a class="btn" href="/blog">Go Back</a>
+				<h2>{data.title}</h2>
+				<div>
+					Written by <strong>{data.author}</strong> on {
+						new Date(data.date).toLocaleDateString()
+					}
+				</div>
+				<Content />
+			</Card>
+		</div>
+	</section>
+</Layout>

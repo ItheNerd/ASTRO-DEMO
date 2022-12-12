@@ -1,0 +1,85 @@
+---
+export interface Props {
+	activeTextColor?: string;
+}
+const { activeTextColor = "#A741FF" } = Astro.props as Props;
+---
+
+<div class="tabs">
+	<ul class="tabs-header">
+		<li class="default-tab">NPM</li>
+		<li>PNPM</li>
+		<li>YARN</li>
+	</ul>
+	<ul class="tabs-content">
+		<li class="tab">
+			<code>$ npm create astro@latest</code>
+		</li>
+		<li class="tab">
+			<code>$ pnpm create astro@latest</code>
+		</li>
+		<li class="tab">
+			<code>$ yarn create astro</code>
+		</li>
+	</ul>
+</div>
+
+<style>
+	.tabs {
+		margin-top: 30px;
+	}
+
+	.tabs-header {
+		display: flex;
+		background: #333;
+		color: #fff;
+		padding: 10px 20px;
+	}
+
+	.tabs-header li {
+		margin-right: 20px;
+		cursor: pointer;
+	}
+
+	.tabs-content {
+		font-size: 18px;
+		padding: 20px;
+		border: 1px solid #333;
+		font-weight: bold;
+		background: #f4f4f4;
+	}
+</style>
+<script define:vars={{ activeTextColor }}>
+	function createTabs(element) {
+		const header = element.querySelector(".tabs-header");
+		const content = element.querySelector(".tabs-content");
+		const tabHeader = [...header.children];
+		const tabContents = [...content.children];
+		tabContents.forEach((x) => (x.style.display = "none"));
+		let currentTabIndex = -1;
+
+		function setTab(index) {
+			if (currentTabIndex > -1) {
+				tabHeader[currentTabIndex].style.fontWeight = 400;
+				tabHeader[currentTabIndex].style.color = "#fff";
+				tabContents[currentTabIndex].style.display = "none";
+			}
+
+			tabHeader[index].style.fontWeight = 800;
+			tabHeader[index].style.color = activeTextColor;
+			tabContents[index].style.display = "flex";
+			currentTabIndex = index;
+		}
+
+		let defaultTabIndex = tabHeader.findIndex((x) => {
+			return [...x.classList].indexOf("default-tab") > -1;
+		});
+
+		defaultTabIndex = defaultTabIndex === -1 ? 0 : defaultTabIndex;
+		setTab(defaultTabIndex);
+		tabHeader.forEach((x, i) => (x.onclick = (event) => setTab(i)));
+	}
+
+	// Run
+	[...document.querySelectorAll(".tabs")].forEach((x) => createTabs(x));
+</script>
